@@ -11,15 +11,14 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - INFER_SOURCE=0     # 0 | /workspace/in.mp4 | pipeline GStreamer
+      - INFER_SOURCE=0
       - IMG_SIZE=640
       - CONF_THRES=0.25
       - HALF=1
       - USE_TRT=0
     devices:
-      - "/dev/video0:/dev/video0"   # USB cam
+      - "/dev/video0:/dev/video0"
     volumes:
       - ./models:/workspace/models
-      - ./app:/workspace/app
       - ./out:/workspace/out
     restart: unless-stopped
