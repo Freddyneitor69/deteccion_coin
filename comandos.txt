@@ -1,3 +1,4 @@
-cd app
-chmod +x setup_and_run.sh entrypoint.sh
-./setup_and_run.sh
+chmod +x run_cam.sh
+./run_cam.sh             
+./run_cam.sh 0 0.35        
+
