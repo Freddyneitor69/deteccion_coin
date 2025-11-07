@@ -2,3 +2,5 @@ chmod +x run_cam.sh
 ./run_cam.sh             
 ./run_cam.sh 0 0.35        
 
+python detect_cam.py --source 0 --conf 0.5
+
