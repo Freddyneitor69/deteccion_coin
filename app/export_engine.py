@@ -8,5 +8,6 @@ args = ap.parse_args()
 
 print("[INFO] Exportando a TensorRT (.engine)...")
 model = YOLO(args.weights)
-model.export(format="engine", imgsz=args.imgsz, half=True, dynamic=False)  # genera models/best.engine
+# Nota: el .engine debe generarse en la Jetson (es específico del dispositivo)
+model.export(format="engine", imgsz=args.imgsz, half=True, dynamic=False)
 print("[INFO] Export listo: models/best.engine")
