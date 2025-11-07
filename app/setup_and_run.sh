@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -e
+cd "$(dirname "$0")"  # ir a app/
 
 echo "[INFO] Verificando Docker..."
-if ! command -v docker &>/dev/null; then
-  echo "[ERROR] Docker no está instalado"; exit 1
-fi
+command -v docker >/dev/null || { echo "[ERROR] Docker no está instalado"; exit 1; }
 
 echo "[INFO] Verificando runtime NVIDIA..."
 if ! docker info 2>/dev/null | grep -q 'Runtimes: .*nvidia'; then
@@ -13,16 +12,24 @@ if ! docker info 2>/dev/null | grep -q 'Runtimes: .*nvidia'; then
   echo "      sudo apt-get install -y nvidia-container-toolkit && sudo systemctl restart docker"
 fi
 
-if [ ! -f "models/best.pt" ]; then
-  echo "[ERROR] Falta models/best.pt"; exit 1
+# Modelos están una carpeta arriba
+if [ ! -f "../models/best.pt" ] && [ ! -f "../models/best.engine" ]; then
+  echo "[ERROR] Falta ../models/best.pt (o best.engine)"; exit 1
 fi
 
-mkdir -p out
+# Habilitar X11 para mostrar ventana
+if command -v xhost >/dev/null; then
+  xhost +local:root >/dev/null 2>&1 || true
+else
+  echo "[WARN] 'xhost' no encontrado; si no ves ventana, instala x11-xserver-utils"
+fi
 
-echo "[INFO] Construyendo imagen..."
+mkdir -p ../out
+
+echo "[INFO] Construyendo imagen (Jetson)..."
 docker compose build
 
-echo "[INFO] Arrancando servicio..."
+echo "[INFO] Levantando servicio..."
 docker compose up -d
 
 echo "[INFO] Logs en vivo (Ctrl+C para salir):"
